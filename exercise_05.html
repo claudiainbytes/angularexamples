@@ -1,0 +1,25 @@
+<!DOCUMENT html>
+
+<!-- EXERCISE 5. RENDERIZANDO EXPRESIONES USANDO FILTROS  -->
+
+<head>
+<meta charset="UTF-8">
+</head>
+
+<body ng-app>
+	
+		Escribe tu nombre: <input type="text" ng-model="name"></input>
+
+		<!-- Filtros en AngularJs 
+			 AngularJs usa el caracter | como canal para combinar filtros con variables en expresiones
+			 {{ [nombre_ng_model]| [nombre_filtro] }} 
+			 En el ejemplo usamos el filtro uppercase que transforma a mayusculas. 
+		--> 
+		<p>Hola {{name | uppercase }}!</p>
+
+<!--Version de angular.js 1.4.8 -->
+<script src="angularjs/angular.min.js"></script>    
+
+</body>
+
+</html>

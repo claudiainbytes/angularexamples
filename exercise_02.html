@@ -1,0 +1,27 @@
+<!DOCUMENT html>
+
+<!-- EXERCISE 2. DIRECTIVA ng-model ENLAZANDO UN INPUT A UNA EXPRESION EN ANGULARJS.-->
+
+<head>
+<meta charset="UTF-8">
+<!--Version de angular.js 1.4.8 -->
+<script src="angularjs/angular.min.js"></script>
+</head>
+
+<!-- DIRECTIVA ng-app -->
+<!-- Permite inicializar aplicacion en angular.js  -->
+<!-- Expresiones en angularJS se renderizan en pantalla por medio de {{ }}  -->
+<body ng-app>
+	
+	<!-- DIRECTIVA ng-model -->
+	<!-- Enlaza un valor ingresado desde un input, selectbox, textarea HTML a los datos de la aplicacion
+		 sincronizandolo por medio de la variable del HTML input llamada name.
+		 El valor ingresado se sincroniza automaticamente en la expresion {{name}}
+     -->
+
+	Escribe tu nombre: <input type="text" ng-model="name"></input>
+	<p>Hola {{name}}!</p>
+
+</body>
+
+</html>

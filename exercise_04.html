@@ -1,0 +1,63 @@
+<!DOCUMENT html>
+
+<!-- EXERCISE 4. RESPONDIENDO A EVENTOS DE CLIC USANDO CONTROLADORES  -->
+
+<head>
+<meta charset="UTF-8">
+</head>
+
+<body>
+	
+	<!-- DIRECTIVA ng-app -->
+	<!-- Esta vez la directiva ng-app sera inicializada en un contenedor div, permitiendo modularidad
+		 tendra un nombre llamado MyApp. -->
+
+	<!-- DIRECTIVA ng-controller -->
+	<!-- Es una directiva que define un controlador. En este ejemplo se llama MyCtrl -->
+
+	<div ng-app="MyApp" ng-controller="MyCtrl">
+
+	  <!-- DIRECTIVA ng-click -->
+	  <!-- Especifica el comportamiento personalizado cuando un elemento es cliqueado -->	
+      <button class="btn" ng-click="toggle()">Toggle</button>
+
+      <!-- DIRECTIVA ng-show -->
+	  <!-- Muestra o oculta el elemento HTML dado basado en la expresion dada al atributo ngShow.
+		   El elemento es mostrado o ocultado removiendo o agregando la clase css .ng-hide dentro del elemento.
+		   .ng-hide es predefinida en AngularJS y configurada para mostrar el estilo.	
+	   -->
+      <p ng-show="visible">Hola mundo!</p>
+    
+    </div>
+    
+    <!--Version de angular.js 1.4.8 -->
+	<script src="angularjs/angular.min.js"></script>
+
+    <script>
+		
+		// Aqui definimos el nombre del modulo en AngularJS MyApp
+		var app = angular.module('MyApp', []);
+
+		//Aqui definimos el controlador MyCtrl
+		//MyCtrl es una funcion javascript
+
+		//AngularJS invocará el controlador con un objeto $scope
+		//$scope es el objeto de la aplicacion, es el que posee las variables y funciones de la aplicacion
+
+		app.controller('MyCtrl', function($scope) {
+
+			//Estado inicial de ng-show="visible"
+		    $scope.visible = true;
+
+		    //Al presionar el boton de forma alterna, se oculta/muestra el mensaje
+			$scope.toggle = function() {
+		    	$scope.visible = !$scope.visible;  //La negacion indica que es FALSE
+		    };
+
+		});
+
+    </script>
+
+</body>
+
+</html>

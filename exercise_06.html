@@ -1,0 +1,68 @@
+<!DOCUMENT html>
+
+<!-- EXERCISE 6. CREANDO ELEMENTOS HTML PERSONALIZADOS CON DIRECTIVAS -->
+
+<!-- Problema: Se desea mostrar un fragmento HTML pero esta oculto por una condicion.
+	 Solución: Crear una directiva personalizada que muestre el fragmento Hola Mundo.
+  -->
+
+<head>
+<meta charset="UTF-8">
+</head>
+
+<!-- DIRECTIVA ng-app -->
+<!-- Esta vez la directiva ng-app sera inicializada en el body, permitiendo modularidad
+	 tendra un nombre llamado MySnippetApp. -->
+
+<body ng-app="MySnippetApp">
+
+    <!-- DIRECTIVA ng-model -->
+	<!-- Es la variable de la aplicacion AngularJs declarada en el input HTML -->
+	<label for="checkbox">
+		<input id="checkbox" type="checkbox" ng-model="visible">Toggle me
+	</label>
+	
+	<!-- Aqui creamos un atributo llamado "mostrar" cuyo valor es "visible" 
+		 Si el checkbox es chuleado, aparece el div. -->
+	<div mostrar="visible">
+		<p>Hello World</p>
+	</div>
+    
+	<!--Version de angular.js 1.4.8 -->
+	<script src="angularjs/angular.min.js"></script>
+    <script>
+		
+		// Aqui definimos el nombre del modulo en AngularJS MySnippetApp
+		var app = angular.module('MySnippetApp', []);
+
+		//Aqui definimos  la directiva "mostrar" a partir del atributo de su mismo nombre que esta en el <div>
+
+		app.directive('mostrar', function() {
+			  
+			  return{
+
+			  	//link es una funcion que retornará el comportamiento de la directiva
+				link: function(scope, element, attributes) {
+
+					//En el alcance observa el comportamiento del atributo mostrar
+					//Si el valor del atributo es " " o vacio entonces no lo muestre.
+					//por medio de la funcion .css() cambiaremos la propiedad display:none
+
+					scope.$watch(attributes.mostrar, function(value){
+
+						//En el formulario la variable visible capturara un estado falso/verdadero segun el evento.
+						//Si es verdadero no mostrara el atributo style="", si es falso mostrara style="display:none"
+						element.css('display', value ? '' : 'none');
+					});
+
+				}
+
+			  };
+
+		});
+
+    </script>
+
+</body>
+
+</html>
