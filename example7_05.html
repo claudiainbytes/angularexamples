@@ -1,0 +1,87 @@
+<!DOCUMENT html>
+
+<!-- Example 703. AngularJS Forms: Mostrar errores de validacion en el formulario -->
+
+<!-- Se requiere validar el formulario desde el lado cliente usado los atributos HTML5.
+	 Angular.js funciona con HTML5 atributos de formulario. 
+-->
+	 
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="bootstrap.css">
+</head>
+
+<!-- DIRECTIVA ng-app -->
+<!-- Permite inicializar aplicacion en angular.js  -->
+<!-- Expresiones en angularJS se renderizan en pantalla por medio de {{ }}  -->
+
+<body ng-app="MyApp">
+	
+	<div ng-controller="Usuario">
+	
+		<!--
+
+			
+		-->
+		
+		<form name="form" ng-submit="submit()" novalidate> 
+			
+			<div class="control-group" ng-class="error('nombre')">
+			<label class="control-label" for="nombre">nombre</label>
+			<div class="controls">
+				<input id="nombre" name="nombre" type="text" ng-model="usuario.nombre" placeholder="nombre" required/>
+				<span class="help-block" ng-show="form.nombre.$invalid && form.nombre.$dirty">Nombre es requerido</span>
+			</div>
+			</div>
+			
+			<div class="control-group" ng-class="error('apellido')">
+			<label class="control-label" for="apellido">Apellido</label>
+			<div class="controls">
+				<input id="apellido" name="apellido" type="text" ng-model="usuario.apellido" placeholder="Apellido" required/>
+				<span class="help-block" ng-show="form.apellido.$invalid && form.apellido.$dirty">Apellido es requerido</span>
+			</div>
+			</div>
+			
+			<div class="control-group">
+			<label>Edad</label>
+			<div class="controls">
+				<input id="edad" name="edad" type="text" ng-model="usuario.edad" placeholder="Edad" /> 
+			</div>
+			</div>
+			
+			<div class="control-group">
+				<div class="controls">
+					<button ng-disabled="form.$invalid" class="btn">Enviar</button> 
+				</div>
+			</div>	
+			
+		</form> 
+		
+	</div>
+	
+	<!--Version de angular.js 1.4.8 -->
+	<script src="angularjs/angular.min.js"></script>
+	<script>
+
+		var app = angular.module("MyApp", []);
+		 
+		app.controller("Usuario", function($scope) {
+		
+			$scope.usuario = {}; 
+			$scope.wasSubmitted = false; 
+			$scope.submit = function() { 																	
+								$scope.wasSubmitted = true;
+						   }; 
+						   
+			$scope.error = function(variableForm) {
+				var s = $scope.form[variableForm];
+				return s.$invalid && s.$dirty ? "error" : "";
+		    };
+
+		});
+
+	</script>
+
+</body>
+
+</html>

@@ -1,0 +1,82 @@
+<!DOCUMENT html>
+
+<!-- Example 703. AngularJS Forms: Mostrar errores de validacion en el formulario -->
+
+<!-- Se requiere validar el formulario desde el lado cliente usado los atributos HTML5.
+	 Angular.js funciona con HTML5 atributos de formulario. 
+-->
+	 
+<head>
+<meta charset="UTF-8">
+<style type="text/css">
+      input.ng-invalid.ng-dirty {
+        background-color: red;
+      }
+      input.ng-valid.ng-dirty {
+        background-color: grey;
+      }
+</style>
+</head>
+
+<body ng-app="MyApp">
+	
+	<div ng-controller="Usuario">
+	
+		<!-- Si el campo nombre no se completa, cambiara de color y mostrara un mensaje de requerido por medio de ng-show 
+			 <p ng-show="form.nombre.$invalid && form.nombre.$dirty">Nombre es requerido</p>
+		-->
+
+		<form name="form" ng-submit="submit()" novalidate> 
+			
+			<label>Nombre</label> 
+			<input name="nombre" type="text" ng-model="usuario.nombre" required/>
+			<p ng-show="form.nombre.$invalid && form.nombre.$dirty">Nombre es requerido</p>
+			
+			<label>Apellido</label> 
+			<input name="apellido" type="text" ng-model="usuario.apellido" required/> 
+			<p ng-show="form.apellido.$invalid && form.apellido.$dirty">Apellido es requerido</p>
+			
+			<label>Edad</label> 
+			<input name="edad" type="text" ng-model="usuario.edad" /> 
+			
+			<button class="btn">Enviar</button> 
+		
+		</form> 
+		
+		<p>Modelo Usuario: {{ usuario }}</p>
+		
+		<p>Fue enviado?: {{wasSubmitted}}</p>
+		
+		<p>Campo nombre valido: {{form.nombre.$valid}}</p> 
+		
+		<p>Campo nombre invalido: {{form.nombre.$invalid}}</p> 
+		
+		<p>Error campo nombre: {{form.nombre.$error}} </p> 
+		
+		<p>Form valido: {{form.$valid}} </p> 
+		
+		<p>Form error de validacion: {{form.$error}}</p>
+		
+	</div>
+	
+	<!--Version de angular.js 1.4.8 -->
+	<script src="angularjs/angular.min.js"></script>
+	<script>
+
+		var app = angular.module("MyApp", []);
+		 
+		app.controller("Usuario", function($scope) {
+		
+			$scope.usuario = {}; 
+			$scope.wasSubmitted = false; 
+			$scope.submit = function() { 																	
+								$scope.wasSubmitted = true;
+						   }; 
+
+		});
+
+	</script>
+
+</body>
+
+</html>

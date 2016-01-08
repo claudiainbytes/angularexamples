@@ -1,0 +1,76 @@
+<!DOCUMENT html>
+
+<!-- Example 701. AngularJS Forms: Implementando un formulario básico -->
+
+<!-- Se requiere crear un formulario que ingrese datos de usuario
+	 y capture esa informacion dentro del scope de AngularJS -->
+
+<head>
+<meta charset="UTF-8">
+</head>
+
+<!-- DIRECTIVA ng-app -->
+<!-- Permite inicializar aplicacion en angular.js  -->
+<!-- Expresiones en angularJS se renderizan en pantalla por medio de {{ }}  -->
+
+<body ng-app="MyApp">
+	
+	<div ng-controller="Usuario">
+	
+		<!-- Atributo novalidate desabilita validaciones HTML5 las cuales son soportadas por el lado del cliente.
+			
+			 Para el ejemplo, solo se quiere que Angular.js valide al completar el formulario.			 
+			 El controlador enlaza los datos del formulario al modelo usuario y este es implementado por medio de la funcion submit().
+			 
+			 La idea inicial cuando se usan formularios seria implementar de la forma tradicional por medio de la serializacion de los datos de formulario
+			 y el envio de estos datos al servidor.
+			 En vez de esto, usamos la directiva ng-model para enlazar el formulario a nuestra propiedad del modelo.
+			 
+			 El boton de submit o enviar tiene un estado que es reflejado en nuestro alcance por medio de la variable wasSubmitted, pero este no indica al servidor
+			 que se enviaron unos datos. El comportamiento por defecto de los forms en Angular.js es prevenir la accion por defecto desde que no queremos 
+			 recargar la pagina por completo. Queremos manipular lo que se le indica al servidor de una forma especifica.
+			 	 
+		-->
+		
+		<form ng-submit="submit()" class="form-horizontal" novalidate> 
+			
+			<label>Nombre</label> 
+			<input type="text" ng-model="usuario.nombre"/>
+			
+			<label>Apellido</label> 
+			<input type="text" ng-model="usuario.apellido"/> 
+			
+			<label>Edad</label> 
+			<input type="text" ng-model="usuario.edad"/> 
+			
+			<button class="btn">Enviar</button> 
+		
+		</form> 
+	
+	</div>
+	
+	<!--Version de angular.js 1.4.8 -->
+	<script src="angularjs/angular.min.js"></script>
+	<script>
+
+		var app = angular.module("MyApp", []);
+		 
+		app.controller("Usuario", function($scope) {
+		
+			$scope.usuario = {}; 
+			$scope.wasSubmitted = false; 
+			$scope.submit = function() { 
+																	
+								$scope.wasSubmitted = true;
+								
+								u = $scope.usuario;	
+								console.log("Nombre: " + u.nombre + " Apellido:" + u.apellido + " Edad:" + u.edad );
+						   }; 
+
+		});
+
+	</script>
+
+</body>
+
+</html>

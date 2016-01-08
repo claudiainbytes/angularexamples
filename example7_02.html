@@ -1,0 +1,97 @@
+<!DOCUMENT html>
+
+<!-- Example 702. AngularJS Forms: Validando un formulario desde el lado cliente -->
+
+<!-- Se requiere validar el formulario desde el lado cliente usado los atributos HTML5.
+	 Angular.js funciona con HTML5 atributos de formulario. 
+-->
+	 
+<head>
+<meta charset="UTF-8">
+</head>
+
+<!-- DIRECTIVA ng-app -->
+<!-- Permite inicializar aplicacion en angular.js  -->
+<!-- Expresiones en angularJS se renderizan en pantalla por medio de {{ }}  -->
+
+<body ng-app="MyApp">
+	
+	<div ng-controller="Usuario">
+	
+		<!--
+			Cuando el formulario esta vacio y fresco, Angular agrega una clase llamada ng-pristine y ng-valid
+			a cada elemento del formulario. 
+			Cuando el form se edita, la clase ng-pristine sera borrada a partir del campo que se esta haciendo el cambio
+			y tambien de la etiqueta del form, reemplazandose por la clase ng-dirty. 
+			Esto es muy util porque permite facilmente añadir nuevos componentes a tu app dependiendo de esos estados.
+			
+			Adicionalmente a esas dos clases CSS, hay dos mas para observar. 
+			ng-valid es una clase que se añadira cuando un input es valido, de lo contrario sera incorporada la clase ng-invalid.
+			
+			Dese cuenta que la etiqueta de formulario tiene una clase valida o invalida dependiendo de los campos de entrada.
+			Para demostrarlo, añadiremos el atributo HTML5 llamado required. Inicialmente, el nombre y apellido estan vacios y tienen la clase ng-invalid
+			donde el campo de edad tiene la clase ng-valid.
+
+			Adicionalmente, hay una clase ng-invalid-required para mas especificidad.
+			
+			Desde que definimos el nombre del atributo en el form, podemos acceder a las variables del scope.
+			Un form Angular tiene las variables $valid, $invalid, $error y $pristine.	
+			
+			
+			For validation, Angular provides built-in directives including required, pattern, minlength, maxlength, min, and max.
+			Let us use Angular's form integration to actually show validation errors in the next recipe.
+			
+		-->
+		
+		<form name="form" ng-submit="submit()"> 
+			
+			<label>Nombre</label> 
+			<input type="text" ng-model="usuario.nombre" required/>
+			
+			<label>Apellido</label> 
+			<input type="text" ng-model="usuario.apellido" required/> 
+			
+			<label>Edad</label> 
+			<input type="text" ng-model="usuario.edad" /> 
+			
+			<button class="btn">Enviar</button> 
+		
+		</form> 
+		
+		<p>Modelo Usuario: {{ usuario }}</p>
+		
+		<p>Fue enviado?: {{wasSubmitted}}</p>
+		
+		<p>Campo nombre valido: {{form.nombre.$valid}}</p> 
+		
+		<p>Campo nombre invalido: {{form.nombre.$invalid}}</p> 
+		
+		<p>Error campo nombre: {{form.nombre.$error}} </p> 
+		
+		<p>Form valido: {{form.$valid}} </p> 
+		
+		<p>Form error de validacion: {{form.$error}}</p>
+		
+	</div>
+	
+	<!--Version de angular.js 1.4.8 -->
+	<script src="angularjs/angular.min.js"></script>
+	<script>
+
+		var app = angular.module("MyApp", []);
+		 
+		app.controller("Usuario", function($scope) {
+		
+			$scope.usuario = {}; 
+			$scope.wasSubmitted = false; 
+			$scope.submit = function() { 																	
+								$scope.wasSubmitted = true;
+						   }; 
+
+		});
+
+	</script>
+
+</body>
+
+</html>
