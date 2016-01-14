@@ -1,0 +1,61 @@
+<!DOCUMENT html>
+
+<!-- Example 806. AngularJS Patrones comunes de interfaces de usuario: Editing Text InPlace Using HTML 5 ContentEditable. Pagina 91. -->
+
+<!-- Se requiere mostrar un mensaje de confirmacion flash despues de enviar datos a un formulario con respuesta exitosa.
+	 Para este ejercicio se requiere un framework. PHP Slim.
+ -->
+	 
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="bootstrap.css">
+<style>
+      [contenteditable] {
+        border: 2px dotted #ccc;
+        background-color: #eee;
+        padding: 2px;
+      }
+</style>
+</head>
+
+<body ng-app="MyApp">
+
+	<div contenteditable ng-model="text"></div> 
+	
+	<p>{{text}}</p>
+	
+	<!--Version de angular.js 1.4.8 -->
+	<script src="angularjs/angular.min.js"></script>
+	<script src="angularjs/angular-ui.js"></script>
+	<script>
+
+		var app = angular.module("MyApp", []);
+
+		app.directive("contenteditable", function() {
+		
+		  return {
+			restrict: "A",
+			require: "ngModel",
+			link: function(scope, element, attrs, ngModel) {
+
+			  function read() {
+				ngModel.$setViewValue(element.html());
+			  }
+
+			  ngModel.$render = function() {
+				element.html(ngModel.$viewValue || "");
+			  };
+
+			  element.bind("blur keyup change", function() {
+				scope.$apply(read);
+			  });
+			}
+		  };
+		  
+		});
+		
+	</script>
+
+</body>
+
+</html>
