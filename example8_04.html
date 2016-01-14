@@ -1,0 +1,120 @@
+<!DOCUMENT html>
+
+<!-- Example 804. AngularJS Patrones comunes de interfaces de usuario: Paginación con resultados infinitos. Pagina 87. -->
+
+<!-- Se requiere paginar a traves de un gran set de resultados del lado del servidor.
+	 Muestra los numeros de paginacion a partir de un set de resultados.
+-->
+	 
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="bootstrap.css">
+</head>
+
+<!-- DIRECTIVA ng-app -->
+<!-- Permite inicializar aplicacion en angular.js  -->
+<!-- Expresiones en angularJS se renderizan en pantalla por medio de {{ }}  -->
+
+<body ng-app="MyApp">
+
+	<h3>Paginando 50 items </h3>
+	<div ng-controller="PaginationCtrl"> 
+		
+		<table class="table table-striped"> 
+			<thead> 
+				<tr> 
+					<th>Id</th> 
+					<th>Name</th> 
+					<th>Description</th> 
+				</tr> 
+			</thead> 
+			<tbody> 
+				<!-- Mostramos el listado en tabla de items. 
+					 Offset permite 
+				-->
+				<tr ng-repeat="item in pagedItems"> 
+					<td>{{item.id}}</td> 
+					<td>{{item.name}}</td> 
+					<td>{{item.description}}</td> 
+				</tr> 
+
+			</tbody>
+			<tfoot> 
+				<td colspan="3"> 
+					<!-- La directiva ng-click invoca la funcion loadMore para cargar 5 registros más -->
+					<!-- La directiva ng-class invoca la funcion nextPageDisabledClass() para deshabilitar el boton al llegar al total de registros -->
+					<button class="btn" href="#" ng-class="nextPageDisabledClass()" ng-click="loadMore()">Cargar Más</button> 
+				</td> 
+			</tfoot>
+		</table>
+	</div>
+	
+	<!--Version de angular.js 1.4.8 -->
+	<script src="angularjs/angular.min.js"></script>
+	<script src="angularjs/angular-ui.js"></script>
+	<script>
+
+		var app = angular.module("MyApp", []);
+		 
+		//La siguiente factoria llamada Item genera a partir de un set de 50 registros el numero de paginas
+		app.factory("Item", function() { 
+			
+			var items = []; 
+			
+			//Agregamos datos al array items
+			for (var i = 0; i < 50; i++) { 
+				items.push(	{ id: i, name: "name "+ i, description: "description " + i }); 
+			} 
+			
+			//La factoria retorna dos metodos
+			//Item.get 
+			//Item.total
+			return{
+				get: function(offset, limit) { 
+						return items.slice(offset, offset + limit); 
+					}, 
+				total: function() { 
+						return items.length; 
+					} 
+			}; 
+			
+		});
+		
+		//Inyectamos la factoria Item en el controlador
+		app.controller("PaginationCtrl", function($scope, Item) {
+			
+			$scope.itemsPerPage = 5; 
+			$scope.currentPage = 0; 
+			
+			$scope.total = Item.total(); 
+			
+			$scope.pagedItems = Item.get($scope.currentPage*$scope.itemsPerPage, $scope.itemsPerPage); 
+			
+			//Funcion que se carga por medio de la directiva ng-click
+			$scope.loadMore = function() { 
+				
+				$scope.currentPage++; 
+				var newItems = Item.get($scope.currentPage*$scope.itemsPerPage, $scope.itemsPerPage); 
+				$scope.pagedItems = $scope.pagedItems.concat(newItems); 
+				
+			}; 
+			
+			//Funcion que se invoca en la directiva ng-class para deshabilitar el boton cuando este llegue al total de todos los registros.
+			$scope.nextPageDisabledClass = function() { 
+			
+				return $scope.currentPage === $scope.pageCount()-1 ? "disabled" : ""; 
+				
+			}; 
+			
+			//Contador de pagina
+			$scope.pageCount = function() { 
+				return Math.ceil($scope.total/$scope.itemsPerPage); 
+			};
+											
+		});
+		
+	</script>
+
+</body>
+
+</html>
