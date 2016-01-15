@@ -1,0 +1,51 @@
+<!DOCUMENT html>
+
+<!-- EXERCISE 8. CAMBIANDO EL VALOR DEL MODELO A PARTIR DE UNA FUNCION DEL CONTROLADOR -->
+
+<!-- Problema: Se desea incrementar un valor del modelo a 1 usando una funcion del controlador.
+	 Solución: Implementar una funcion incremental que cambia el alcance
+  -->
+
+<head>
+<meta charset="UTF-8">
+</head>
+
+<body ng-app="myApp">
+
+    <div ng-controller="MyCtrl">
+	    <!-- ng-init 
+			Es la directiva que me permite inicializar los datos de la aplicacion.
+			Define valores iniciales. Aqui invocamos una funcion llamada incrementValue() la cual 
+			pasamos un parametro que sumará o aumentaré el valor que esta en el modelo.
+
+			Esta funcion dentro del controlador lo que permite es separar nuestra logica de negocio desde nuestra vista, asi podemos tambien crear pruebas unitarias para estas.
+	    -->
+		<p ng-init="incrementValue(1)">{{ value }}</p>
+	</div>
+    
+	<!--Version de angular.js 1.4.8 -->
+	<script src="angularjs/angular.min.js"></script>
+    <script>
+
+    	//Nuestra app
+    	var app = angular.module('myApp', []);
+
+    	//Nuestro controlador MyCtrl
+		app.controller('MyCtrl', function($scope) {
+
+			//Inicializamos value en 1
+			$scope.value = 1;
+
+			//Creamos una funcion llamada incrementValue que sumará value con el parametro increment
+
+			$scope.incrementValue = function(increment) {
+				$scope.value += increment;
+			};
+			
+		});
+
+    </script>
+
+</body>
+
+</html>

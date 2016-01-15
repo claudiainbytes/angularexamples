@@ -1,0 +1,67 @@
+<!DOCUMENT html>
+
+<!-- EXERCISE 10. RESPONDIENDO A CAMBIOS DEL ALCANCE
+  -->
+
+<!-- Problema: Se desea responder al cambio del valor de un modelo para lanzar más acciones. 
+	 Para el e jemplo,    se quiere configurar otro valor en el modelo dependiendo de el valor que estamos llamando.
+	 Solución: Utilizamos la funcion $watch en el controlador
+  -->
+
+<head>
+<meta charset="UTF-8">
+</head>
+
+<body ng-app="myApp">
+
+    <div ng-controller="MyCtrl">
+
+    	<!-- Al ingresar el nombre obtenemos un saludo amigable -->
+    	<input type="text" ng-model="nombre" placeholder="Ingresa tu nombre">
+    	<!-- Aqui usamos un nuevo valor que definimos en el modelo -->
+		<p>{{saludos}}</p>
+	
+	</div>
+    
+	<!--Version de angular.js 1.4.8 -->
+	<script src="angularjs/angular.min.js"></script>
+    <script>
+
+    	//Nuestra app
+    	var app = angular.module('myApp', []);
+
+    	//Nuestro controlador MyCtrl
+		app.controller('MyCtrl', function($scope) {
+
+			$scope.nombre = "";
+
+			// El primer argumento de la funcion $watch es actualmente una expresion Angular, así que
+			// puedes usar expresiones mas complejas como [value1, value2] | json o incluso una funcion
+			// en JS. En este caso, necesitamos retornar una cadena String en la function watch
+
+			// El segundo parametro es una funcion que es invocada cuando la expresion evaluada retorna un 
+			// valor diferente. El primer parametro es el nuevo valor y el segundo es el antiguo. 
+			// Internamente, se usa angular.equals para determinar su igualdad, lo cual significa que 
+			// ambos objetos o valores pasaron por el comparador ===.
+
+			$scope.$watch("nombre", function(newValue, oldValue){
+				if($scope.nombre.length > 0){
+					$scope.saludos = "Saludos " + $scope.nombre;
+				}
+			});
+
+			/* El objeto $watch en AngularJS hace la función de observador, es decir, si le pasamos una función como parámetro a dicho objeto, cada vez que exista cualquier cambio, éste será observado por $watch y la petición se ejecutará automáticamente sin necesidad de hacer nada más, $watch estará siempre pendiente de cualquier cambio y actuará siguiendo el proceso de dicha función. 
+			*/
+
+			$scope.$watch(function() {
+						return $scope.nombre;
+				}, function(newValue, oldValue) {
+						console.log("Cambio detectado: " + newValue)
+				});
+			});
+
+    </script>
+
+</body>
+
+</html>

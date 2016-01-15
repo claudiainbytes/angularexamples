@@ -1,0 +1,56 @@
+<!DOCUMENT html>
+
+<!-- EXERCISE 22. FILTROS. FORMATEANDO UN STRING CON UN FILTRO TIPO MONEDA
+
+Los filtros se usan para formatear expresiones en la plantilla. Transforman los datos de entrada en un
+nuevo tipo de datos con formato.
+
+Un filtro va asi: {{ [nombre_variable_modelo ] | [nombre_filtro] }}
+
+<!--Problema: Se requiere formatear el monto de moneda con una etiqueta de moneda segun localidad.
+
+	Solución: Usa el filtro currency y asegurate que cargas el correspondiente archivo local por cada lenguaje de usuario
+-->
+
+<head>
+<meta charset="UTF-8">
+</head>
+
+<body ng-app="MyApp">
+
+	<p>Ingresamos un monto que será mostrado usando configuración país en AngularJS</p>
+
+	<!-- ng-model es la variable va a transformar el monto en moneda -->
+	<input type="text" ng-model="monto" placeholder="Ingresar monto"/>
+
+	<!-- El filtro currency trae el simbolo de euro por defecto -->
+	<p>Moneda por defecto: {{ monto | currency }}</p>
+
+	<!-- El filtro currency puede ser personalizado, en vez de simbolo definimos un nombre -->
+	<p>Personalizar Moneda: {{ monto | currency: "Euro" }}</p>
+
+	<!-- Incorporamos jquery para que funcione dentro de las directivas -->
+	<script src="jquery/jquery.min.js"></script>
+
+	<!--Version de angular.js 1.4.8 -->
+	<script src="angularjs/angular.min.js"></script>
+
+	<!-- Información de datos de configuracion local segun país en Angular.js-->
+	<script src="angularjs/angular-locale_de.js"></script>
+    
+    <script>
+
+    	//Nuestra app
+    	var app = angular.module('MyApp', []);
+
+    	//Directiva tabs
+		app.directive("tabs", function() {
+			
+		});
+
+		
+    </script>
+
+</body>
+
+</html>

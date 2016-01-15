@@ -1,0 +1,69 @@
+<!DOCUMENT html>
+
+<!-- EXERCISE 24. FILTROS. PASANDO PARAMETROS DE CONFIGURACION A FILTROS
+
+<!--Problema: Se requiere hacer un filtro personalizado por medio de la introduccion de parametros de 
+	configuracion
+
+	Solución: Filtros de angular pueden ser pasados por medio de un hash de paramentros los cuales estaran directamente accedidos en la funcion del filtro
+
+-->
+
+<head>
+<meta charset="UTF-8">
+</head>
+
+<body ng-app="MyApp">
+
+	<input type="text" ng-model="text" placeholder="Enter text"/>
+	<p>Input: {{ text }}</p>
+
+	<!-- Podemos agregar parametros a la funcion de filtro que hemos creado
+		 para el ejemplo definimos un sufijo dentro de un hash
+	-->
+	<p>Filtered input: {{ text | reverse: { suffix: "?"} }}</p>
+
+	<!-- Incorporamos jquery para que funcione dentro de las directivas -->
+	<script src="jquery/jquery.min.js"></script>
+
+	<!--Version de angular.js 1.4.8 -->
+	<script src="angularjs/angular.min.js"></script>
+
+	<!-- Información de datos de configuracion local segun país en Angular.js-->
+	<script src="angularjs/angular-locale_de.js"></script>
+    
+    <script>
+
+    	//Nuestra app
+    	var app = angular.module('MyApp', []);
+
+    	//Creamos un filtro personalizado llamado revertir
+    	app.filter("reverse", function() {
+
+    		//la funcion reverse tiene dos parametros: 
+    		//input es la entrada de texto
+    		//options son las opciones o parametros que defino en la expresion
+	    	return function(input, options) {
+		    	
+		    	input = input || "";
+		    	
+		    	var result = "";
+		    	
+		    	//Uno de los parametros es suffix
+		    	var suffix = options["suffix"] || "";
+		    	
+		    	for (var i=0; i<input.length; i++) {
+		    		result = input.charAt(i) + result;
+		    	}
+		    	
+		    	if (input.length > 0) result += suffix;
+		    	
+		    	return result;
+	    	};
+    	});
+		
+    </script>
+
+</body>
+
+</html>

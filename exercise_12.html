@@ -1,0 +1,72 @@
+<!DOCUMENT html>
+
+<!-- EXERCISE 12. COMPARTIENDO INSTRUCCIONES DE CODIGO ENTRE CONTROLADORES USANDO SERVICIOS
+  -->
+
+<!-- Problema: Se desea compartir la logica de negocio entre controladores.
+	 Solución: Utilizamos un Servicio para implementar la logica de negocio y usamos inyeccion de dependencias para usar este servico en los controladores
+     Para el ejemplo, la plantilla muestra el acceso a una lista de usuarios desde dos controladores
+  -->
+
+<head>
+<meta charset="UTF-8">
+</head>
+
+<body ng-app="MyApp">
+
+	<div ng-controller="MyCtrl">
+	
+		<!-- ng-repeat
+			Es una directiva que lee secuencialmente un conjunto de elementos
+		-->
+		<ul ng-repeat="usuario in usuarios">
+			<li>{{usuario}}</li>
+		</ul>
+	
+		<div class="nested" ng-controller="MyNestedCtrl">
+			Primer Usuario: {{primerUsuario}}
+		</div>
+
+	</div>
+    
+	<!--Version de angular.js 1.4.8 -->
+	<script src="angularjs/angular.min.js"></script>
+    <script>
+
+    	//Nuestra app
+    	var app = angular.module('MyApp', []);
+
+    	//El metodo factory crea un patron singleton llamado UserService que retorna dos 
+    	//funciones para recuperar todos los usuarios y tambien el primer usuario. 
+    	app.factory("UserService", function() {
+
+			var usuarios = ["Peter", "Daniel", "Nina", "Mia", "Luke", "Leiah"];
+			return {
+				all: function() {
+					return usuarios;
+				},
+				first: function() {
+					return usuarios[0];
+				}
+			};
+
+		});
+
+		//Los controladores obtienen el metodo UserService que retorna dos funciones inyectadas por adicion en su respectivo controlador como segundo parametro. 
+
+    	//Nuestro controlador MyCtrl
+		app.controller('MyCtrl', function($scope, UserService) {
+			$scope.usuarios = UserService.all();
+		});
+
+		//Nuestro controlador anidado MyNestedCtrl heredara referencias del controlador padre
+		app.controller('MyNestedCtrl', function($scope, UserService) {
+			$scope.primerUsuario = UserService.first();
+		});
+
+
+    </script>
+
+</body>
+
+</html>

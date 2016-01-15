@@ -1,0 +1,69 @@
+<!DOCUMENT html>
+
+<!-- EXERCISE 19. DIRECTIVAS. RENDERIZANDO REPETIDAMENTE UN NODO DEL DOM 
+  -->
+
+<!--Problema: Se desea renderizar un fragmento HTML repetidamente usando los nodos hijos de la directiva 
+    como una plantilla.
+	
+	Solución: Implementar una funcion compiladora en la directiva
+-->
+
+<head>
+<meta charset="UTF-8">
+</head>
+
+<body ng-app="MyApp">
+
+	<!--Nuestra directiva personalizada repeat-ntimes -->
+	<repeat-ntimes repeat="10">
+		<h1>Encabezado 1</h1>
+		<p>Este es el parrafo.</p>
+	</repeat-ntimes>
+
+	<!-- Incorporamos jquery para que funcione dentro de las directivas -->
+	<script src="jquery/jquery.min.js"></script>
+
+	<!--Version de angular.js 1.4.8 -->
+	<script src="angularjs/angular.min.js"></script>
+    
+    <script>
+
+    	//Nuestra app
+    	var app = angular.module('MyApp', []);
+
+    	//Nuestro controlador MyCtrl
+		app.controller('MyCtrl', function($scope) {
+		});
+
+		//Creamos la directiva myWidget en las etiquetas es my-widget
+		app.directive("repeatNtimes", function() {
+
+				//compile recibe una funcion con dos parametros 
+				//tElement corresponde al elemento contenedor, es decir, el elemento/directiva repeat-ntimes
+				//attrs corresponde al numero de repeticiones que queremos y que se define en el atributo repeat=10
+
+				//usamos compile para manipular solamente elementos de la plantilla del DOM
+				//Usamos el linkfunction si vamos a añadir un comportamiento y trabajar con el scope
+
+				return {
+					restrict: "E",
+					compile: function(tElement, attrs) {
+						
+						var content = tElement.children();
+						
+						for ( var i = 1; i < attrs.repeat; i ++ ) {
+							tElement.append(content.clone());
+						}
+
+					}
+				};
+
+		});
+
+
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,54 @@
+<!DOCUMENT html>
+
+<!-- EXERCISE 23. FILTROS. IMPLEMENTAR UN FILTRO PERSONALIZADO PARA REVERTIR UNA ENTRADA DE TIPO STRING
+
+<!--Problema: Se requiere revertir la entrada de texto que haya digitado el usuario.
+
+	Solución: Implementar filtros personalizados, los cuales revierte la entrada.
+-->
+
+<head>
+<meta charset="UTF-8">
+</head>
+
+<body ng-app="MyApp">
+
+	<input type="text" ng-model="texto" placeholder="Ingresar texto"/>
+	
+	<!--Muestra el resultado de la entrada normal -->
+	<p>Input: {{ texto }}</p>
+	
+	<!--Muestra la entrada revertida, llamando al filtro personalizado revertir -->
+	<p>Filtered input: {{ texto | revertir }}</p>
+
+	<!-- Incorporamos jquery para que funcione dentro de las directivas -->
+	<script src="jquery/jquery.min.js"></script>
+
+	<!--Version de angular.js 1.4.8 -->
+	<script src="angularjs/angular.min.js"></script>
+
+	<!-- Información de datos de configuracion local segun país en Angular.js-->
+	<script src="angularjs/angular-locale_de.js"></script>
+    
+    <script>
+
+    	//Nuestra app
+    	var app = angular.module('MyApp', []);
+
+    	//Creamos un filtro personalizado llamado revertir
+    	app.filter("revertir", function() {
+	    	return function(input) {
+		    	var result = "";
+		    	input = input || "";
+		    	for (var i=0; i<input.length; i++) {
+		    		result = input.charAt(i) + result;
+		    	}
+		    	return result;
+	    	};
+    	});
+		
+    </script>
+
+</body>
+
+</html>

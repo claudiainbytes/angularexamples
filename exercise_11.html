@@ -1,0 +1,83 @@
+<!DOCUMENT html>
+
+<!-- EXERCISE 11. COMPARTIENDO MODELOS ENTRE CONTROLADORES ANIDADOS
+  -->
+
+<!-- Problema: Se desea compartir un modelo entre una jerarquia anidada de controladores
+	 Solución: Utilizamos objetos JS en vez de referencias de alcance $parent primitivas o directas
+     Para el ejemplo, la plantilla usa un controlador MyCtrl y anida un controlador MyNestedCtrl
+  -->
+
+<head>
+<meta charset="UTF-8">
+</head>
+
+<body ng-app="MyApp">
+
+	<p>Si yo escribo algo en una entrada, esta será alterada</p>
+
+    <div ng-controller="MyCtrl">
+
+    	<h2>Controlador MyCtrl</h2>
+    
+    	<label>Primitivo nombre</label>
+			<input type="text" ng-model="nombre">
+		</br>	
+		<label>Objeto usuario.nombre</label>
+			<input type="text" ng-model="usuario.nombre">
+		</br>
+
+		<div class="nested" ng-controller="MyNestedCtrl">
+			
+			<h2>Controlador Anidado MyNestedCtrl</h2>
+			
+			<label>Primitivo nombre</label>
+				<input type="text" ng-model="nombre">
+			</br>
+			
+			<label>Primitivo con referencia $parent explicita, $parent.nombre</label>
+				<input type="text" ng-model="$parent.nombre">
+			</br>
+
+			<label>Objeto usuario.nombre</label>
+				<input type="text" ng-model="usuario.nombre">
+			</br>
+
+		</div>
+	
+	</div>
+    
+	<!--Version de angular.js 1.4.8 -->
+	<script src="angularjs/angular.min.js"></script>
+    <script>
+
+    	//Nuestra app
+    	var app = angular.module('MyApp', []);
+
+    	//Nuestro controlador MyCtrl
+		app.controller('MyCtrl', function($scope) {
+
+			$scope.nombre  = "Peter";
+			$scope.usuario = {
+							nombre: "Parker"
+			};
+
+		});
+
+		//Nuestro controlador anidado MyNestedCtrl heredara referencias del controlador padre
+		app.controller('MyNestedCtrl', function($scope) {
+
+		});
+
+		/* Todos los valores por defecto estan definidos en MyCtrl, la cual es el controlador padre de MyNestedCtrl.
+		Cuando realizamos cambios en la primera entrada, estos seran sincronizados con los otros campos unidos por la variable nombre. 
+		Todos estos comparten la misma variable de alcance siempre y cuando solo lee la variable. Si cambia el valor anidado, una copia en el scope de MyNestedCtrl será creado.
+		Objetos: sus referencias se mantienen en sincronia.
+		Tipos Primitivos: Tienen sincronia siempre que no se cambian dentro del alcance del controlador hijo.
+    	*/
+
+    </script>
+
+</body>
+
+</html>

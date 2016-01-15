@@ -1,0 +1,63 @@
+<!DOCUMENT html>
+
+<!-- EXERCISE 9. ENCAPSULANDO EL VALOR DEL MODELO A PARTIR DE UNA FUNCION DEL CONTROLADOR -->
+
+<!-- Problema: Se desea recuperar un modelo por medio de una funcion(en vez de acceder directamente al  
+	 alcance de la plantilla) que encapsule el valor de un modelo
+	 Solución: Definir una funcion getter que retorne el valor de un modelo
+
+  -->
+
+<head>
+<meta charset="UTF-8">
+</head>
+
+<body ng-app="myApp">
+
+    <div ng-controller="MyCtrl">
+
+    	<p>Sin usar directiva, value es: {{ value }}</p>
+		   
+	    <p ng-init="incrementValue(1)">Usando directiva, value es: {{ value }}</p>
+		
+		<p>Usando solo la funcion, value es: {{ getIncrementedValue() }}</p>
+	
+	</div>
+    
+	<!--Version de angular.js 1.4.8 -->
+	<script src="angularjs/angular.min.js"></script>
+    <script>
+
+    	/*
+	 	MyCtrl define la funcion getIncrementdValue, la cual se usa el valor actual y lo retorna incrementado en 1. Segun el caso de uso podriamos usar un filtro. Pero hay casos de usos especificos para el comportamiento del controlador donde un filtro generico no es requerido.
+ 		*/
+
+    	//Nuestra app
+    	var app = angular.module('myApp', []);
+
+    	//Nuestro controlador MyCtrl
+		app.controller('MyCtrl', function($scope) {
+
+			//Inicializamos value en 1
+			$scope.value = 1;
+
+			//Creamos una funcion llamada incrementValue que sumará value con el parametro increment
+
+			$scope.incrementValue = function(increment) {
+				$scope.value += increment;
+			};
+			
+			//Creamos una funcion llamada getIncrementedValue que toma el valor del modelo que esta encapsulado en el controlador retornando asi un incremento.
+			$scope.getIncrementedValue = function() {
+				return $scope.value + 1;
+			};
+
+
+
+		});
+
+    </script>
+
+</body>
+
+</html>

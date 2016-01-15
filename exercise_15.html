@@ -1,0 +1,103 @@
+<!DOCUMENT html>
+
+<!-- EXERCISE 15. DIRECTIVAS. CAMBIANDO EL DOM EN RESPUESTA A LAS ACCIONES DEL USUARIO
+  -->
+
+<!--Problema: Se desea cambiar el CSS de un elemento HTML cuando se realiza un evento de clic del mouse y se 
+    desea encapsular su comportamiento en un componete reusable.
+	
+	Solución: Implementar una directiva my-widget que contiene un parrafo de ejemplo de texto que quieres estilizar.
+-->
+
+<head>
+<meta charset="UTF-8">
+</head>
+
+<body ng-app="MyApp">
+
+	<!--my-widget es nuestra directiva myWidget creada dentro del la app MyApp
+		al hacer clic sobre el parrafo, el fondo de este cambiara a rojo
+	-->
+	<my-widget>
+		<p>Hello World encapsulado como elemento</p>
+	</my-widget>
+
+	<div my-otro-widget>
+		<p>Hello World encapsulado como atributo</p>
+	</div>
+
+	<!-- Incorporamos jquery para que funcione dentro de las directivas -->
+	<script src="jquery/jquery.min.js"></script>
+
+	<!--Version de angular.js 1.4.8 -->
+	<script src="angularjs/angular.min.js"></script>
+    
+    <script>
+
+    	//Nuestra app
+    	var app = angular.module('MyApp', []);
+
+    	//Nuestro controlador MyCtrl
+		app.controller('MyCtrl', function($scope) {
+		});
+
+		//Creamos la directiva myWidget en las etiquetas es my-widget
+		app.directive("myWidget", function() {
+			
+			//Esta funcion es lo que retornará la directiva segun 
+			//la accion que haya hecho el usuario
+			var linkFunction = function(scope, element, attributes) {
+				
+				var paragraph = element.children()[0];
+
+				$(paragraph).on("click", function() {
+					$(this).css({ "background-color": "red" });
+				});
+
+			};
+
+			//En el retorno o respuesta de la directiva invocamos
+			//link: es la funcion que responde al evento
+			//restrict: "E" restringe la directiva como elemento
+			return {
+				restrict: "E",
+				link: linkFunction
+			};
+
+		});
+
+		//Creamos la directiva myWidget en las etiquetas es my-otro-widget
+		//El metodo de la directiva espera una funcion que puede ser usada para inicializar e injectar dependencias(por medio de factory)
+		app.directive("myOtroWidget", function() {
+			
+			var linkFunction = function(scope, element, attributes) {
+				
+				//Element es el elemnto encapsulador, el primer nivel encuentra a <p>
+				var paragraph = element.children()[0];
+
+				$(paragraph).on("click", function() {
+					$(this).css({ "background-color": "yellow" });
+				});
+
+			};
+
+			//En el retorno o respuesta de la directiva invocamos
+			//link: es la funcion que responde al evento
+			//restrict: "A" restringe la directiva como atributo
+			//			"C" restringe la directiva como clase
+			//"E" restringe directiva como elemento
+			//"AE" restringe directiva como elemento y atributo
+			//"M" restringe directiva como comentarios
+
+			return {
+				restrict: "A",
+				link: linkFunction
+			};
+
+		});
+
+    </script>
+
+</body>
+
+</html>

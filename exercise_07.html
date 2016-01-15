@@ -1,0 +1,46 @@
+<!DOCUMENT html>
+
+<!-- EXERCISE 7. ASIGNANDO UN VALOR POR DEFECTO AL MODELO -->
+
+<!-- Problema: Se desea asignar un valor por defecto al alcance en el contexto del controlador.
+	 Solución: Usar la directiva ng-controller en la plantilla.
+  -->
+
+<head>
+<meta charset="UTF-8">
+</head>
+
+<body ng-app="myApp">
+
+	<!-- DIRECTIVA ng-controller -->
+	<!-- ng-controller define el alcance donde va a llegar la variable. El alcance es jerarquico y sigue la 	 jerarquia de acuerdo al nodo del DOM. 
+	     En el ejemplo, la expresion es correctamente evaluada a "algun valor", desde que ese valor es configurado
+	     dentro del controlador MyCtrl. Esto no funcionaria si el valor de la expresion fue movida fuera del 
+	     alcance del controlador. 
+	-->
+
+	<!-- value es evaluado y aparece dentro del contenedor --> 
+    <div ng-controller="MyCtrl">
+		<p>Value es: {{ value }}</p>
+	</div>
+
+	<!-- value no se puede evaluar, esta fuera del alcance del contenedor --> 
+	<p>Value es: {{value}}</p>
+	<div ng-controller="MyCtrl">
+	</div>
+    
+	<!--Version de angular.js 1.4.8 -->
+	<script src="angularjs/angular.min.js"></script>
+    <script>
+
+    	/* El controlador debe ser declarado dentro de la aplicacion */
+    	var app = angular.module('myApp', []);
+		app.controller('MyCtrl', function($scope) {
+    		$scope.value = "Algún valor";
+		});
+
+    </script>
+
+</body>
+
+</html>

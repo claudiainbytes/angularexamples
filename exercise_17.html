@@ -1,0 +1,62 @@
+<!DOCUMENT html>
+
+<!-- EXERCISE 17. DIRECTIVAS. RENDERIZAR UN ELEMENTO HIJO DEL DOM POR MEDIO DE UNA DIRECTIVA
+  -->
+
+<!--Problema: El uso de tu widget accede a los nodos hijos del elemento de directiva para crear un 
+	renderizado combinado
+	Solución: Usar el atributo/directiva ng-transclude para incluir un elemento dentro de otro ya existente
+
+	Transclude significa: incluir un elemento despues de una trancision
+-->
+
+<head>
+<meta charset="UTF-8">
+</head>
+
+<body ng-app="MyApp">
+
+	<!-- Nuestra directiva personalizada my-widget -->
+	<my-widget>
+		<h1 style='border:1px solid red;'>Mariana Sanchez Williams</h1>
+	</my-widget>
+
+	<!-- Incorporamos jquery para que funcione dentro de las directivas -->
+	<script src="jquery/jquery.min.js"></script>
+
+	<!--Version de angular.js 1.4.8 -->
+	<script src="angularjs/angular.min.js"></script>
+    
+    <script>
+
+    	//Nuestra app
+    	var app = angular.module('MyApp', []);
+
+    	//Nuestro controlador MyCtrl
+		app.controller('MyCtrl', function($scope) {
+		});
+
+		//Creamos la directiva myWidget en las etiquetas es my-widget
+		app.directive("myWidget", function() {
+			
+
+			//Transclude incluye un elemento dentro de uno ya existente.
+			//La directiva ng-trasclude toma el h1 de my-widget y lo reencapsula dentro del
+			//contenido del template que vamos a incorporar.
+			return {
+			    restrict: "E",
+			    transclude: true,
+			    template: "<div style='border:1px solid black;'>" +
+			    		  "<ng-transclude></ng-transclude>" +
+			    		  "<p>Coordinadora de nutrición y deporte del programa " +
+			    		  "¿Cuanto quieres perder? Certificada en spinning, pilates y kickboxing</p>" +
+			    		  "</div>"
+	  		};
+
+		});
+
+    </script>
+
+</body>
+
+</html>

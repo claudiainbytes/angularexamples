@@ -1,0 +1,90 @@
+<!DOCUMENT html>
+
+<!-- EXERCISE 16. DIRECTIVAS. RENDERIZAND UN FRAGMENTO HTML COMO UN COMPONENTE REUSABLE
+  -->
+
+<!--Problema: Se desea renderizar un fragmento HTML como un componete reusable.
+	Solución: Implementar una directiva y usar el atributo de una plantilla para definir el HTML.
+-->
+
+<head>
+<meta charset="UTF-8">
+</head>
+
+<body ng-app="MyApp">
+
+	<p>Ejemplo 1:</p>
+	<!--La directiva myWidget muestra un fragmento HTML enviado desde la propiedad template que esta en el 
+		elemento return.
+		Esto retorna un parametro que será el elemento hijo de ese componente-->
+	<my-widget></my-widget>
+
+	<p>Ejemplo 2:</p>
+	
+	<my-otro-widget>Se reemplazará por Hola Mundo</my-otro-widget>
+
+	<p>Ejemplo 3:</p>
+	
+	<my-ultimo-widget><h2>Reemplazado por un recurso externo</h2></my-ultimo-widget>
+
+	<!-- Incorporamos jquery para que funcione dentro de las directivas -->
+	<script src="jquery/jquery.min.js"></script>
+
+	<!--Version de angular.js 1.4.8 -->
+	<script src="angularjs/angular.min.js"></script>
+    
+    <script>
+
+    	//Nuestra app
+    	var app = angular.module('MyApp', []);
+
+    	//Nuestro controlador MyCtrl
+		app.controller('MyCtrl', function($scope) {
+		});
+
+		//Creamos la directiva myWidget en las etiquetas es my-widget
+		app.directive("myWidget", function() {
+			
+			//template: es la funcion que responde al evento
+			//restrict: "E" restringe la directiva como elemento
+			return {
+				restrict: "E",
+				template: "<p>Hola Mundo </p>"
+			}	
+		});
+
+		//Creamos la directiva myOtroWidget en las etiquetas es my-otro-widget
+		app.directive("myOtroWidget", function() {
+			
+			//template: es la funcion que responde al evento
+			//restrict: "E" restringe la directiva como elemento
+			//replace: true, reemplaza el elemento hijo
+			return {
+				restrict: "E",
+				replace: true,
+				template: "<p>Hola Mundo desde myOtroWidget</p>"
+			}	
+		});
+
+		//Creamos la directiva myUltimoWidget en las etiquetas es my-ultimo-widget
+		//Trae como fragmento el archivo widget.html externo
+		//widget.html debe traer el fragrmento encapsulado todo en un contenedor <div>
+		//En caso de que no, este mostarara un error
+		//El archivo debe estar al mismo nivel que la directiva que lo invoca
+		app.directive("myUltimoWidget", function() {
+			
+			//templateUrl: trae un elemento 
+			//restrict: "E" restringe la directiva como elemento
+			//replace: true, reemplaza el elemento hijo
+			return {
+				restrict: "E",
+				replace: true,
+				templateUrl:  "widget.html"
+			}	
+		});
+
+    </script>
+
+</body>
+
+</html>

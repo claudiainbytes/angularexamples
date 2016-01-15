@@ -1,0 +1,66 @@
+<!DOCUMENT html>
+
+<!-- EXERCISE 13. TESTEANDO CONTROLADORES
+  -->
+
+<!-- Problema: Se desea realizar pruebas unitarias para testear la logica del negocio
+
+	 Solución: Implementamos Jasmine para realizar pruebas unitarias y el proyecto angular-seed.
+  -->
+
+<head>
+<meta charset="UTF-8">
+</head>
+
+<body ng-app="myApp">
+
+    <div ng-controller="MyCtrl">
+
+    	<!-- Al ingresar el nombre obtenemos un saludo amigable -->
+    	<input type="text" ng-model="nombre" placeholder="Ingresa tu nombre">
+    	<!-- Aqui usamos un nuevo valor que definimos en el modelo -->
+		<p>{{saludos}}</p>
+	
+	</div>
+    
+	<!--Version de angular.js 1.4.8 -->
+	<script src="angularjs/angular.min.js"></script>
+    <script>
+
+    	//Nuestra app
+    	var app = angular.module('myApp', []);
+
+    	//Nuestro controlador MyCtrl
+		app.controller('MyCtrl', function($scope) {
+
+			$scope.nombre = "";
+
+			$scope.$watch("nombre", function(newValue, oldValue){
+				if($scope.nombre.length > 0){
+					$scope.saludos = "Saludos " + $scope.nombre;
+				}
+			});
+
+		describe('MyCtrl', function(){
+			
+			var scope, ctrl;
+			
+			beforeEach(inject(function($controller, $rootScope) {
+				scope = $rootScope.$new();
+				ctrl = $controller(MyCtrl, { $scope: scope });
+			}));
+			
+			it('should change greeting value if name value is changed', function() {
+				scope.name = "Frederik";
+				scope.$digest();
+				expect(scope.greeting).toBe("Greetings Frederik");
+			});
+				
+		});		
+
+
+    </script>
+
+</body>
+
+</html>

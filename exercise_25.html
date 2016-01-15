@@ -1,0 +1,68 @@
+<!DOCUMENT html>
+
+<!-- EXERCISE 25. FILTROS. FILTRANDO UNA LISTA DE NODOS DEL DOM
+
+<!--Problema: Se requiere hacer un filtro de una lista no ordenada de nombres
+
+	Solución: En adicion de strings en la entrada, los filtros de angular tambien trabajan con arrays.
+
+-->
+
+<head>
+<meta charset="UTF-8">
+</head>
+
+<body ng-app="MyApp">
+
+	<p>Transforma un array en una lista no ordenada</p>
+	
+	<!-- ng-init con esta directiva iniciamos un array de nombres llamada names -->
+	<ul ng-init="names = ['Peter', 'Anton', 'John', 'Justin', 'Tom']">
+
+	    <!-- Usamos la directiva ng-repeat para que recorra e imprima cada nombre 
+		     Usamos el filtro personalizado exclude para sacare el nombre que detestamos		
+	    -->
+		<li ng-repeat="name in names | exclude:'Justin' ">
+			<span>{{name}}</span>
+		</li>
+
+	</ul>
+
+	<!-- Incorporamos jquery para que funcione dentro de las directivas -->
+	<script src="jquery/jquery.min.js"></script>
+
+	<!--Version de angular.js 1.4.8 -->
+	<script src="angularjs/angular.min.js"></script>
+
+	<!-- Información de datos de configuracion local segun país en Angular.js-->
+	<script src="angularjs/angular-locale_de.js"></script>
+    
+    <script>
+
+    	//Nuestra app
+    	var app = angular.module('MyApp', []);
+
+    	//Creamos un filtro personalizado llamado exclude
+    	app.filter("exclude", function() {
+	    	
+	    	//El segundo parametro es el valor que vamos a excluir
+	    	return function(input, exclude) {
+		    
+		    	var result = [];
+		    
+		    	for (var i=0; i<input.length; i++) {
+			    	if (input[i] !== exclude) {
+			    		result.push(input[i]);
+			    	}
+		    	}
+		    
+		    	return result;
+	    	};
+
+    	});
+		
+    </script>
+
+</body>
+
+</html>

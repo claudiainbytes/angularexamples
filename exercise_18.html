@@ -1,0 +1,125 @@
+<!DOCUMENT html>
+
+<!-- EXERCISE 18. DIRECTIVAS. PASANDO PARAMETROS DE CONFIGURACION USANDO HTML
+  -->
+
+<!--Problema: Se desea pasar unos parametros de configuracion para cambiar la salida cuando se renderiza en  			   pantalla.
+	Solución: Usar el atributo basado en la directiva y pasar un valor de atributo para la configuracion.
+			  El atributo es pasado como parametro a la funcion link.
+-->
+
+<head>
+<meta charset="UTF-8">
+</head>
+
+<body ng-app="MyApp">
+
+    <p>Pasando parametros desde el atributo/directiva my-widget</p>
+
+	<!-- Nuestra directiva personalizada my-widget interpretada como atributo 
+		 por medio del atributo/directiva my-widget pasamos un parametro, ejemplo "Hola Mundo!"
+	-->
+	<div my-widget="Hola Mundo!"></div>
+
+	<p>Pasando parametros usando my-widget-dos como elemento</p>
+
+	<!-- Nuestra directiva personalizada my-widget-dos se define un atributo llamado texto por el que pasamos un parametro, ejemplo "Hola Alicia!"
+	-->
+	<my-widget-dos texto="Hola Alicia!"></my-widget-dos>
+
+	<p>Pasando parametros usando my-widget-tres como elemento =text, como no hay anidamiento, la expresion no es interpretada</p>
+
+	<my-widget-tres texto="Hola Conejo!"></my-widget-tres>
+	
+	<p>Pasando parametros de tipo expresion usando my-widget-expr como elemento</p>
+
+	<my-widget-expr fn="count = count + 1"></my-widget-expr>
+	
+	<!-- Incorporamos jquery para que funcione dentro de las directivas -->
+	<script src="jquery/jquery.min.js"></script>
+
+	<!--Version de angular.js 1.4.8 -->
+	<script src="angularjs/angular.min.js"></script>
+    
+    <script>
+
+    	//Nuestra app
+    	var app = angular.module('MyApp', []);
+
+    	//Nuestro controlador MyCtrl
+		app.controller('MyCtrl', function($scope) {
+		});
+
+		//Creamos la directiva myWidget en las etiquetas es my-widget
+		app.directive("myWidget", function() {
+
+			//linkFunction es nuestra funcion que retornaremos 
+			//El parametro attributes trae el valor definido en la directiva allá arriba
+			//Y definimos la variable texto dentro del scope del modelo en el cual le pasamos el atributo
+			var linkFunction = function(scope, element, attributes) {
+				scope.texto = attributes["myWidget"];
+			};
+
+			//En la plantilla colocamos la expresion {{texto}} que se renderizará en pantalla como un parrafo
+			return {
+				restrict: "A",
+				template: "<p><b>{{texto}}</b> Hoy vamos a tener un día caluroso.</p>",
+				link: linkFunction
+			};
+
+		});
+
+		//Creamos la directiva myWidgetDos 
+		//Usando texto: "@texto" enlazamos la variable del modelo con el atributo que se le pasa el parametro
+		app.directive("myWidgetDos", function() {
+
+			//Definimos dentro del scope el atributo a pasar, en este caso texto
+			return {
+				restrict: "E",
+				template: "<p><b>{{texto}}</b> ¿Por que te comiste ese hongo?</p>",
+				scope: {
+					texto: "@texto"
+				}
+			};
+		});
+
+		//Creamos la directiva myWidgetTres 
+		//Usando texto: "=texto" cambia el alcance local por el del padre
+		app.directive("myWidgetTres", function() {
+
+			//Definimos dentro del scope el atributo a pasar, en este caso texto
+			return {
+				restrict: "E",
+				template: "<p><b>{{texto}}</b> ¿Por que huyes?</p>",
+				scope: {
+					texto: "@texto"
+				}
+			};
+		});
+
+		//Creamos la directiva myWidgetExpr 
+		app.directive("myWidgetExpr", function() {
+			
+			//la funcion retornara en el modelo el contador fn aumentado en 5
+			//Recordemos que en my-widget-expr definimos el atributo 
+			//fn="count = count + 1"
+			var linkFunction = function(scope, element, attributes) {
+				scope.text = scope.fn({ count: 5 }); //Count era 1, ahora será 6
+			};
+			
+			//&fn pasa el parametro tipo expresion
+			return {
+				restrict: "E",
+				template: "<p>Cuenta: <b>{{text}}</b></p>",
+				link: linkFunction,
+				scope: {
+					fn: "&fn"
+				}
+			};
+		});
+
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,87 @@
+<!DOCUMENT html>
+
+<!-- EXERCISE 20. DIRECTIVAS. COMUNICACION DE DIRECTIVA A DIRECTIVA
+  -->
+
+<!--Problema: Se desea comunicar una directiva con otra e incrementar su comportamiento por medio de una API 
+	bien definida.
+	
+	Solución: Implementar una directiva llamada basket con una funcion controladora y otras dos directivas llamadas naranja y manzana, que serán requeridas por el controlador principal. Para nuestro ejemplo, este
+	empezaria con las directivas manzana y naranja usadas como atributos.
+
+-->
+
+<head>
+<meta charset="UTF-8">
+</head>
+
+<body ng-app="MyApp">
+
+	<basket manzana naranja>Roll over me and check the console!</basket>
+
+	<!-- Incorporamos jquery para que funcione dentro de las directivas -->
+	<script src="jquery/jquery.min.js"></script>
+
+	<!--Version de angular.js 1.4.8 -->
+	<script src="angularjs/angular.min.js"></script>
+    
+    <script>
+
+    	//Nuestra app
+    	var app = angular.module('MyApp', []);
+
+    	//Nuestro controlador MyCtrl
+		app.controller('MyCtrl', function($scope) {
+		});
+
+		//Creamos la directiva basket
+		//En el return hay una propiedad controller, esta es una funcion que define metodos 
+		//cada vez que se comunica con una directiva, en este caso agrega/incrementa una palabra al contenido
+		//link es una funcion que maneja el comportamieto de la directiva. Para el ejemplo cada vez que se sobrepasa en un texto mostrará en el console.log el contenido
+		app.directive("basket", function() {
+			return {
+				restrict: "E",
+				controller: function($scope, $element, $attrs) {
+					$scope.content = [];
+					this.addManzana = function() {
+						$scope.content.push("manzana");
+					};
+					this.addNaranja = function() {
+						$scope.content.push("naranja");
+					};
+				},
+				link: function(scope, element) {
+					element.bind("mouseenter", function() {
+						console.log(scope.content);
+					});
+				}
+			};
+		});
+
+		//Directiva manzana
+		//En el require llamaremos a la directiva basket, es decir la principal
+		//link es una funcion que retorna el contenido del metodo addManzana que esta definido en el controlador de la directiva basket
+		app.directive("manzana", function() {
+			return {
+				require: "basket",
+				link: function(scope, element, attrs, basketCtrl) {
+					basketCtrl.addManzana();
+				}
+			};
+		});
+
+		//Directiva naranja hace lo mismo que la directiva manzana
+		app.directive("naranja", function() {
+			return {
+				require: "basket",
+				link: function(scope, element, attrs, basketCtrl) {
+					basketCtrl.addNaranja();
+				}
+			};
+		});
+
+    </script>
+
+</body>
+
+</html>

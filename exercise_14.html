@@ -1,0 +1,57 @@
+<!DOCUMENT html>
+
+<!-- EXERCISE 14. DIRECTIVAS. COMPARTIENDO INSTRUCCIONES DE CODIGO ENTRE CONTROLADORES USANDO SERVICIOS
+  -->
+
+<!--Problema: Se desea desabilitar un boton dependiendo de un estado checkbox.
+	Solución: Usar directiva ng-disabled y enlazar su condicion al estado checkbox.
+-->
+
+<!-- DIRECTIVAS EN ANGULAR.JS
+
+Directivas son una de los mas poderosos conceptos en Angular que permiten crear elementos HTML personalizados para tu aplicacion. Esto permite desarrollar componentes reusables los cuales encapsulan estructuras DOM, 
+hojas de estilo e incluso comportamientos
+-->
+
+<head>
+<meta charset="UTF-8">
+</head>
+
+<body ng-app="MyApp">
+
+	<div ng-controller="MyCtrl">
+	
+		<label><input type="checkbox" ng-model="checked"/>Boton alternador</label>
+
+		<!-- ng-disabled 
+			 Esa directiva es una traduccion directa del atributo HTML desabilitado, sin que necesites preocuoparte acerca de las incompatibilidades del navegador. Este es enlazado por medio del valor del atributo/directiva ng-model que es checked. El valor checked esta en la directiva/atributo ng-disabled. Si usas checked o !checked, Angular las interpretará como expresiones.
+
+			 El valor checked funciona tambien para las directivas ng-hide, ng-mouseenter.
+
+		-->
+
+		<button ng-disabled="checked">Presioname</button>
+
+		<h2>!Checked</h2>
+
+		<label><input type="checkbox" ng-model="!checked"/>Boton alternador</label>
+		<button ng-disabled="!checked">Presioname</button>
+
+	</div>
+    
+	<!--Version de angular.js 1.4.8 -->
+	<script src="angularjs/angular.min.js"></script>
+    <script>
+
+    	//Nuestra app
+    	var app = angular.module('MyApp', []);
+
+    	//Nuestro controlador MyCtrl
+		app.controller('MyCtrl', function($scope) {
+		});
+
+    </script>
+
+</body>
+
+</html>
