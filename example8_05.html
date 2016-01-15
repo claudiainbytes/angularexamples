@@ -1,0 +1,88 @@
+<!DOCUMENT html>
+
+<!-- Example 805. AngularJS Patrones comunes de interfaces de usuario: Mensajes de confirmacion/fallo a usuario. Pagina 88. -->
+
+<!-- Se requiere mostrar un mensaje de confirmacion flash despues de enviar datos a un formulario con respuesta exitosa.
+	 Para este ejercicio se requiere un framework. PHP Slim.
+ -->
+	 
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="bootstrap.css">
+</head>
+
+<body ng-app="MyApp" ng-controller="MyCtrl">
+
+    <ul class="nav nav-pills">
+      <li><a href="#/">Home</a></li>
+      <li><a href="#/page">Next Page</a></li>
+    </ul>
+
+    <div class="alert" ng-show="flash.getMessage()">
+      <b>Alert!</b>
+      <p>{{flash.getMessage()}}</p>
+    </div>
+
+    <ng-view></ng-view>
+
+    <script type="text/ng-template" id="home.html">
+      <h3>Home</h3>
+
+      <form ng-submit="submit(message)" class="form-inline">
+        <input type="text" ng-model="message" autofocus>
+        <button class="btn">Submit</button>
+      </form>
+
+    </script>
+
+    <script type="text/ng-template" id="page.html">
+      <h3>Next Page</h3>
+    </script>
+	
+	<!--Version de angular.js 1.4.8 -->
+	<script src="angularjs/angular.min.js"></script>
+	<script src="angularjs/angular-ui.js"></script>
+	<script>
+
+		var app = angular.module("MyApp", []);
+
+		app.config(function($routeProvider) {
+		  $routeProvider.
+			when("/home", { templateUrl: "home.html" }).
+			when("/page", { templateUrl: "page.html" }).
+			otherwise({ redirectTo: "/home" });
+		});
+
+		app.factory("flash", function($rootScope) {
+		  var queue = [];
+		  var currentMessage = "";
+
+		  $rootScope.$on("$routeChangeSuccess", function() {
+			currentMessage = queue.shift() || "";
+		  });
+
+		  return {
+			setMessage: function(message) {
+			  queue.push(message);
+			},
+			getMessage: function() {
+			  return currentMessage;
+			}
+		  };
+		});
+
+		app.controller("MyCtrl", function($scope, $location, flash) {
+		  $scope.flash = flash;
+		  $scope.message = "Hello World";
+
+		  $scope.submit = function(message) {
+			flash.setMessage(message);
+			$location.path("/page");
+		  }
+		});
+		
+	</script>
+
+</body>
+
+</html>

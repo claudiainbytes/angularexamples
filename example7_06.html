@@ -1,0 +1,88 @@
+<!DOCUMENT html>
+
+<!-- Example 706. AngularJS Forms: Implementando validaciones personalizadas -->
+
+<!-- Se requiere validar la entrada de un dato comparandolo con una lista negra de palabras.
+
+-->
+	 
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="bootstrap.css">
+</head>
+
+<!-- DIRECTIVA ng-app -->
+<!-- Permite inicializar aplicacion en angular.js  -->
+<!-- Expresiones en angularJS se renderizan en pantalla por medio de {{ }}  -->
+
+<body ng-app="MyApp">
+	
+	<div ng-controller="Usuario">
+	
+		<!--
+			Con la directiva ng-disabled, podemos controlar el estado de formulario. 
+			Si el formulario esta incompleto o invalido, el boton de este se encontrará deshabilitado.
+		-->
+		
+		<form name="form" ng-submit="submit()" class="form-horizontal" novalidate> 
+			
+			<div class="control-group" ng-class="error('nombre')">
+				<label class="control-label" for="nombre">Nombre</label>
+				<div class="controls">
+					<!-- Atributo ui-validate se define en las directivas de la app en angular y se le pasa la 
+					funcion notBlackListed($valor) cuyo parametro es 
+					el texto a pasar -->
+					<input id="nombre" name="nombre" type="text" ng-model="usuario.nombre" required ui-validate=" { blacklisted: 'notBlackListed($value)' } "/>
+					<span class="help-block" ng-show="form.nombre.$invalid && form.nombre.$dirty">Nombre es requerido</span>
+					<span ng-show='form.nombre.$error.blacklisted'>Nombre esta en listanegra.</span>
+					<br>
+				</div>
+			</div>
+						
+			<div class="control-group">
+				<div class="controls">
+					<button ng-disabled="form.$invalid" class="btn">Enviar</button> 
+				</div>
+			</div>
+		
+        </form>
+			
+	</div>
+	
+	<!--Version de angular.js 1.4.8 -->
+	<script src="angularjs/angular.min.js"></script>
+	<script src="angularjs/angular-ui.js"></script>
+	<script>
+
+		var app = angular.module("MyApp", ["ui", "ui.directives"]);
+		 
+		app.controller("Usuario", function($scope) {
+		
+			$scope.usuario = {}; 
+			
+			$scope.wasSubmitted = false; 
+			
+			//listado de palabras no deseadas
+			$scope.blacklist = ['idiot','loser','idiota', 'perdedor'];
+			
+			//Si la palabra es no deseada, mostrará error por medio del form.nombre.$error.blacklisted
+			$scope.notBlackListed = function(value) {
+				return $scope.blacklist.indexOf(value) === -1;
+			};	
+			
+			$scope.submit = function() { 																	
+								$scope.wasSubmitted = true;
+						   }; 
+						   
+			$scope.error = function(variableForm) {
+				var s = $scope.form[variableForm];
+				return s.$invalid && s.$dirty ? "error" : "";
+		    };
+
+		});
+		
+	</script>
+
+</body>
+
+</html>

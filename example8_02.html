@@ -1,0 +1,132 @@
+<!DOCUMENT html>
+
+<!-- Example 801. AngularJS Patrones comunes de interfaces de usuario: Paginación del lado del cliente -->
+
+<!-- Tienes una tabla de datos completamente del lado del cliente y quieres paginarlos.
+
+	 La solucion consiste en usar una tabla HTML con la directiva ng-repeat para renderizar solo los items por la pagina actual.
+	 Todas la logica de la paginacion deberia ser manipulada en un formulario personalizado e implementando un controlador.
+-->
+	 
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="bootstrap.css">
+</head>
+
+<!-- DIRECTIVA ng-app -->
+<!-- Permite inicializar aplicacion en angular.js  -->
+<!-- Expresiones en angularJS se renderizan en pantalla por medio de {{ }}  -->
+
+<body ng-app="MyApp">
+
+	<h3>Paginando 50 items </h3>
+	<div ng-controller="PaginationCtrl"> 
+		
+		<table class="table table-striped"> 
+			<thead> 
+				<tr> 
+					<th>Id</th> 
+					<th>Name</th> 
+					<th>Description</th> 
+				</tr> 
+			</thead> 
+			<tbody> 
+				<!-- Mostramos el listado en tabla de items. 
+					 Offset permite 
+				-->
+				<tr ng-repeat="item in items | offset: currentPage*itemsPerPage | limitTo: itemsPerPage"> 
+					<td>{{item.id}}</td> 
+					<td>{{item.name}}</td> 
+					<td>{{item.description}}</td> 
+				</tr> 
+			</tbody>
+			<tfoot> 
+				<td colspan="3"> 
+					<div class="pagination"> 
+						<ul> 
+							<li ng-class="prevPageDisabled()"> 
+								<a href ng-click="prevPage()">« Anterior</a> 
+							</li> 
+							<li ng-repeat="n in range()" ng-class="{active: n == currentPage}" ng-click="setPage(n)"> 
+								<a href="#">{{n+1}}</a> 
+							</li> 
+							<li ng-class="nextPageDisabled()"> 
+								<a href ng-click="nextPage()">Siguiente »</a> 
+							</li> 
+						</ul> 
+					</div> 
+				</td> 
+			</tfoot>
+		</table>
+	</div>
+	
+	<!--Version de angular.js 1.4.8 -->
+	<script src="angularjs/angular.min.js"></script>
+	<script src="angularjs/angular-ui.js"></script>
+	<script>
+
+		//Con ["ui","ui.directives"] manipulamos el paginador
+		var app = angular.module("MyApp", ["ui", "ui.directives"]);
+		
+		//Creamos un filtro personalizado llamado offset que posiciona el numero donde debe aparecer el siguiente conjunto de items.
+		app.filter('offset', function() { 
+		
+			return function(input, start) { 
+				start = parseInt(start, 10); 
+				return input.slice(start); 
+			};
+			
+		});
+		
+		app.controller("PaginationCtrl", function($scope) { 
+			
+			//Items permitidos por pagina
+			$scope.itemsPerPage = 5; 
+			
+			//Pagina inicial/actual
+			$scope.currentPage = 0; 
+			
+			//Iniciamos la variable items como un array vacio
+			$scope.items = []; 
+			
+			//Anadimos elementos al array items por medio de push()
+			for ( var i = 0; i < 50; i++ ) { 
+				$scope.items.push({ id: i, name: "name "+ i, description: "description " + i }); 
+			} 
+			
+			//Funcion que retrocede a la pagia anterior. currentPage-1
+			$scope.prevPage = function() { 
+					if ($scope.currentPage > 0) { 
+						$scope.currentPage--; 
+					} 
+			}; 
+			
+			//Funcion que evita retroceder si la pagina actual es la primera.
+			$scope.prevPageDisabled = function() { 
+				return $scope.currentPage === 0 ? "disabled" : ""; 
+			}; 
+			
+			//Funcion que obtiene el numero de paginas
+			$scope.pageCount = function() { 
+				return Math.ceil($scope.items.length/$scope.itemsPerPage)-1; 
+			}; 
+			
+			//Funcion que avanza a la pagina siguiente
+			$scope.nextPage = function() { 
+				if ($scope.currentPage < $scope.pageCount()) { 
+					$scope.currentPage++; 
+				} 
+			}; 
+			
+			//Funcion que evita avanzar a la pagina siguiente si la pagina actual es igual al numero total de paginas
+			$scope.nextPageDisabled = function() { 
+				return $scope.currentPage === $scope.pageCount() ? "disabled" : ""; 
+			};
+											
+		});
+		
+	</script>
+
+</body>
+
+</html>
